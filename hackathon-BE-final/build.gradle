@@ -32,6 +32,10 @@ dependencies {
 	//jsoup 의존성 추가
 	implementation 'org.jsoup:jsoup:1.14.3'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//chat-gpt 의존성 추가
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter'
+	// 아마 사용안할듯?
+//	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {
