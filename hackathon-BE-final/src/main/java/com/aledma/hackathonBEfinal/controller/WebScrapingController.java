@@ -30,19 +30,15 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
     @PostMapping("/url")
-    public ResponseEntity<String> extractText(String url, Model model) {
+    public ResponseEntity<String> extractText(String url) {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
-//            String summarizedText = chatGptService.summarizeText(text);
-//            model.addAttribute("inputText", text);
-//            model.addAttribute("summarizedText", summarizedText);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//            return new ResponseEntity<>(summarizedText, HttpStatus.OK);
-            return new ResponseEntity<>(HttpStatus.OK);
+            String sum_text = this.chatGptService.summarizeText(text);
+            return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } // 수정이 다소 필요한 듯한 느낌.
+        }
     }
 
 }

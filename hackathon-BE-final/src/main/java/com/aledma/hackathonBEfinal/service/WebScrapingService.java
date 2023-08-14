@@ -22,12 +22,13 @@ public class WebScrapingService {
         Document document = Jsoup.connect(url).get();
         String text = document.text();
         return text;
+    }
+}
+// db에 결과물 저장해놓기
 //        WebScrapingDto responseDto = new WebScrapingDto();
 //        responseDto.setUrl(url);
 //        WebScraping webScraping = WebScraping.of(responseDto);
 //        this.webScrapingRepository.save(webScraping);
-    }
-}
 
 //    public void saveTextToFile(String filename, String text) throws IOException {
 //        try (FileWriter fileWriter = new FileWriter(filename)) {
