@@ -28,8 +28,8 @@ public class SwaggerConfig {
     @Bean
     public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-//                .consumes(getConsumeContentTypes())
-//                .produces(getProduceContentTypes())
+                .consumes(getConsumeContentTypes())
+                .produces(getProduceContentTypes())
                 .apiInfo(apiInfo()).select()
                 // controller 파일들이 있는 경로(패키지?) 설정
                 .apis(RequestHandlerSelectors.basePackage("com.aledma.hackathonBEfinal.controller"))
@@ -37,16 +37,17 @@ public class SwaggerConfig {
                 .build()
                 .useDefaultResponseMessages(false);
     }
-//    private Set<String> getConsumeContentTypes() {
-//        Set<String> consumes = new HashSet<>();
-//        consumes.add("application/json;charset=UTF-8");
-//        consumes.add("application/x-www-form-urlencoded");
-//        return consumes;
-//    }
-//
-//    private Set<String> getProduceContentTypes() {
-//        Set<String> produces = new HashSet<>();
-//        produces.add("application/json;charset=UTF-8");
-//        return produces;
-//    }
+    private Set<String> getConsumeContentTypes() {
+        Set<String> consumes = new HashSet<>();
+        consumes.add("application/json;charset=UTF-8");
+        consumes.add("application/x-www-form-urlencoded");
+        return consumes;
+    }
+
+    private Set<String> getProduceContentTypes() {
+        Set<String> produces = new HashSet<>();
+        produces.add("application/json;charset=UTF-8");
+        produces.add("text/plain");
+        return produces;
+    }
 }

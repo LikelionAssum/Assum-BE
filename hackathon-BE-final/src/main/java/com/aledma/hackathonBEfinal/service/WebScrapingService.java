@@ -20,7 +20,7 @@ public class WebScrapingService {
     // url로 부터 text 추출하고 DB에 저장
     public String extractTextFromUrl(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
-        String text = document.text();
+        String text = document.body().text().trim().replaceAll("\\s+", " ");;
         return text;
     }
 }

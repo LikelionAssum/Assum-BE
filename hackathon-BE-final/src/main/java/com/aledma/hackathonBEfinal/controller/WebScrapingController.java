@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
@@ -30,10 +31,11 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
     @PostMapping("/url")
-    public ResponseEntity<String> extractText(String url) {
+    public ResponseEntity<String> extractText(@RequestParam("url") String url) {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
             String sum_text = this.chatGptService.summarizeText(text);
+            System.out.println(sum_text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

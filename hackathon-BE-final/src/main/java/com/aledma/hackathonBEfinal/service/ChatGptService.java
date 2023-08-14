@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -25,24 +31,35 @@ public class ChatGptService {
     public String summarizeText(String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("Authorization", "Bearer " + chatGptApiKey);
+        headers.setBearerAuth(chatGptApiKey);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        JSONObject requestJson = new JSONObject();
-        requestJson.put("prompt", "Summarize the following text:\n" + inputText);
-        requestJson.put("max_tokens", 50);
-        requestJson.put("temperature", 0.7);
+        // 4097은 입력 토큰 + 출력 토큰의 최대 수
+        int maxOutputTokens = 1000;
 
-        String requestData = objectMapper.writeValueAsString(requestJson);
+        Map<String, Object> requestJson = new HashMap<>();
+        requestJson.put("model", "gpt-3.5-turbo-16k");
 
-//        String requestData = "{\"prompt\": \"Summarize the following text:\\n" + JSONObject.quote(inputText) + "\", \"max_tokens\": 50, \"temperature\": 0.7}";
-//        String requestData = "{\"prompt\": \"Summarize the following text:\\n" + inputText.replace("\"", "\\\"") + "\", \"max_tokens\": 50, \"temperature\": 0.7}";
+        List<Map<String, String>> messages = new ArrayList<>();
+
+//        Map<String, String> systemMessage = new HashMap<>();
+//        systemMessage.put("role", "system");
+//        systemMessage.put("content", "Your role is to summarize");
+
+        Map<String, String> userMessage = new HashMap<>();
+        userMessage.put("role", "user");
+        userMessage.put("content", "다음 문자열을 최대한 많이 요약해서 알려줘\n" + inputText);
+
+//        messages.add(systemMessage);
+        messages.add(userMessage);
+
+        requestJson.put("messages", messages);
+        // 맥시멈 토큰 수 제한
+        requestJson.put("max_tokens", maxOutputTokens);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.postForEntity(
                 chatGptApiEndpoint,
-                HttpMethod.POST,
-                new HttpEntity<>(requestData, headers),
+                new HttpEntity<>(requestJson, headers),
                 String.class
         );
 
@@ -52,12 +69,15 @@ public class ChatGptService {
         return generatedText;
     }
 
-    private String extractGeneratedText(String responseBody) {
-        JSONObject jsonResponse = new JSONObject(responseBody);
-        JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-        if (choicesArray.length() > 0) {
-            JSONObject firstChoice = choicesArray.getJSONObject(0);
-            String generatedText = firstChoice.getString("text");
+    private String extractGeneratedText(String responseBody) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+        JsonNode choicesArray = jsonNode.get("choices");
+        if (choicesArray.isArray() && choicesArray.size() > 0) {
+            JsonNode firstChoice = choicesArray.get(0);
+            JsonNode message = firstChoice.get("message");
+            String generatedText = message.get("content").asText();
             return generatedText;
         } else {
             return "No generated text available";
@@ -65,75 +85,5 @@ public class ChatGptService {
     }
 
 }
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.set("Authorization", "Bearer " + chatGptApiKey);
-//
-//        String prompt = "Summarize the following text:\n" + inputText;
-//
-//        String requestData = "{\"prompt\": \"Summarize the following text:\\n" + inputText.replace("\"", "\\\"") + "\", \"max_tokens\": 50, \"temperature\": 0.7}";
-//
-//        String requestData = "{\"messages\": [{\"role\": \"system\", \"content\": \"Your role is to summarize the string.\"}, {\"role\": \"user\", \"content\": \"이 긴 문자열을 필요없는 내용은 버리고 요약해줘 " + inputText.replace("\"", "\\\"") + "\"}]}";
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<String> response = restTemplate.exchange(
-//                chatGptApiEndpoint,
-//                HttpMethod.POST,
-//                new HttpEntity<>(requestData, headers),
-//                String.class
-//        );
-//
-//        String responseBody = response.getBody();
-//        String generatedText = extractGeneratedText(responseBody);
-//
-//        return generatedText;
-//    }
-//
-//    private String extractGeneratedText(String responseBody) {
-//        JSONObject jsonResponse = new JSONObject(responseBody);
-//        JSONArray choicesArray = jsonResponse.getJSONArray("choices");
-//        if (choicesArray.length() > 0) {
-//            JSONObject firstChoice = choicesArray.getJSONObject(0);
-//            String generatedText = firstChoice.getString("text");
-//            return generatedText;
-//        } else {
-//            return "No generated text available";
-//        }
-//    }
-
-    // text-davinci-003 사용 429에러 계속 발생
-//    public String summarizeText(String inputText) throws IOException {
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.set("Authorization", "Bearer " + chatGptApiKey);
-//
-//        String requestData = "{\"messages\": [{\"role\": \"system\", \"content\": \"Your role is to summarize the string.\"}, {\"role\": \"user\", \"content\": \"이 긴 문자열을 필요없는 내용은 버리고 요약해줘 " + inputText.replace("\"", "\\\"") + "\"}]}";
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//        ResponseEntity<String> response = restTemplate.exchange(
-//                chatGptApiEndpoint,
-//                HttpMethod.POST,
-//                new HttpEntity<>(requestData, headers),
-//                String.class
-//        );
-//        long millisecondsToWait = 30 * 1000; // 30 seconds in milliseconds
-//        try {
-//            Thread.sleep(millisecondsToWait);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//        System.out.println("Waited for 30 seconds.");
-//        String responseBody = response.getBody();
-//        String generatedText = extractGeneratedText(responseBody);
-//
-//        return generatedText;
-//    }
-//
-//    private String extractGeneratedText(String responseBody) {
-//        JSONObject jsonResponse = new JSONObject(responseBody);
-//        String generatedText = jsonResponse.getString("text");
-//        return generatedText;
-//    }
-
 
 
