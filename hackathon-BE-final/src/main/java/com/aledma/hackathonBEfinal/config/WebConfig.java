@@ -1,4 +1,4 @@
-package com.aledma.hackathonBEfinal;
+package com.aledma.hackathonBEfinal.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -14,11 +14,11 @@ CORS(Cross-Origin Resource Sharing) : 프론트와 백엔드 간의 접근 권�
 public class WebConfig implements WebMvcConfigurer {
 
     // allowedOrigins에 프론트 서버 도메인이 들어가면 될거 같은 느낌?
-    @Override
+
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
-                .allowedOrigins("https://localhost:300-")
+                .allowedOrigins("https://localhost:3000")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
                 .allowCredentials(true);
     }

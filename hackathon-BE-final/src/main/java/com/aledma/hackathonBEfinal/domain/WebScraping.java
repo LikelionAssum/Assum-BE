@@ -1,6 +1,7 @@
-package com.aledma.hackathonBEfinal.webscraping;
+package com.aledma.hackathonBEfinal.domain;
 
 
+import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,15 +19,10 @@ public class WebScraping {
     @Column
     private String url;
 
-//    @Column(columnDefinition = "LONGTEXT")
-//    private String scraping_text;
-
-
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()
                 .id(scrapingDto.getId())
                 .url(scrapingDto.getUrl())
-//                .scraping_text(scrapingDto.getScraping_text())
                 .build();
     }
 

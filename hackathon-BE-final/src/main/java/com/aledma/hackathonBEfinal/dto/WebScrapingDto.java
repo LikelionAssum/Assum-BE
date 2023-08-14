@@ -1,4 +1,4 @@
-package com.aledma.hackathonBEfinal.webscraping;
+package com.aledma.hackathonBEfinal.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,5 +20,4 @@ public class WebScrapingDto {
     // url 정규표현식 어떻게 구현?
     private String url;
 
-//    private String scraping_text;
 }
