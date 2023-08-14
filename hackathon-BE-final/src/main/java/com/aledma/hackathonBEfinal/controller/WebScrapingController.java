@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
 @RequiredArgsConstructor
-@RequestMapping("/scraping")
+@RequestMapping("/")
 @RestController
 public class WebScrapingController {
 
