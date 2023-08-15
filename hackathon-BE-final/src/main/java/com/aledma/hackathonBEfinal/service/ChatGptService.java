@@ -32,7 +32,7 @@ public class ChatGptService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
-        
+
         int maxOutputTokens = 1500;
 
         Map<String, Object> requestJson = new HashMap<>();
@@ -52,7 +52,7 @@ public class ChatGptService {
                 " 제목 : \n" +
                 "키워드 : \n" +
                 "요약글 : \n 이런 형식으로 해줘.\n" + inputText);
-        
+
         messages.add(userMessage);
 
         requestJson.put("messages", messages);
