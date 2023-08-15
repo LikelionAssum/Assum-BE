@@ -20,4 +20,6 @@ public class WebScrapingDto {
     // url 정규표현식 어떻게 구현?
     private String url;
 
+    private String sum_text;
+
 }

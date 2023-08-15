@@ -24,6 +24,7 @@ public class WebScrapingService {
         return text;
     }
 }
+
 // db에 결과물 저장해놓기
 //        WebScrapingDto responseDto = new WebScrapingDto();
 //        responseDto.setUrl(url);

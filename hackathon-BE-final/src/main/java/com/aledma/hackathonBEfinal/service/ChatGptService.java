@@ -32,24 +32,27 @@ public class ChatGptService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
-
-        // 4097은 입력 토큰 + 출력 토큰의 최대 수
-        int maxOutputTokens = 1000;
+        
+        int maxOutputTokens = 1500;
 
         Map<String, Object> requestJson = new HashMap<>();
         requestJson.put("model", "gpt-3.5-turbo-16k");
 
         List<Map<String, String>> messages = new ArrayList<>();
 
+        // 시스템 메세지 부여 삭제
 //        Map<String, String> systemMessage = new HashMap<>();
 //        systemMessage.put("role", "system");
 //        systemMessage.put("content", "Your role is to summarize");
 
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");
-        userMessage.put("content", "다음 문자열을 최대한 많이 요약해서 알려줘\n" + inputText);
-
-//        messages.add(systemMessage);
+        userMessage.put("content", "다음 문자열을 최대한 많이 요약해서 알려줘\n " +
+                "이때 문자열내에서 제목, 키워드 4개도 찾아서 알려줘. 응답의 형식은\n" +
+                " 제목 : \n" +
+                "키워드 : \n" +
+                "요약글 : \n 이런 형식으로 해줘.\n" + inputText);
+        
         messages.add(userMessage);
 
         requestJson.put("messages", messages);
