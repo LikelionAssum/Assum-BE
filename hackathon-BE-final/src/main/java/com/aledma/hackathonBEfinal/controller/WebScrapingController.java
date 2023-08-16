@@ -18,7 +18,6 @@ import java.util.List;
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
 @RequiredArgsConstructor
-@RequestMapping("/")
 @RestController
 public class WebScrapingController {
 
@@ -45,12 +44,5 @@ public class WebScrapingController {
         }
     }
 
-//    @ApiOperation(value = "text추출", notes = "url에서 text를 추출하는 api")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "텍스트 추출 성공"),
-//            @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
-//    })
-//    @GetMapping("/all")
-//    public List<WebScraping>
 
 }

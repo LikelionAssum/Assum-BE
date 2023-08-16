@@ -17,7 +17,6 @@ import java.util.List;
 
 @Api(tags = "User", description = "User관련 로직 작성")
 @RequiredArgsConstructor
-@RequestMapping("/user")
 @RestController
 public class UserController {
 
@@ -57,7 +56,7 @@ public class UserController {
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "로그인 성공")
+            @ApiResponse(code = 200, message = "리스트 가져오기 성공")
     })
     @GetMapping("/{userId}/all")
     public ResponseEntity<List<WebScraping>> getUserQuestions(@PathVariable Long userId) {
