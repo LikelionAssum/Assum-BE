@@ -28,7 +28,6 @@ public class WebScraping {
 
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()
-                .id(scrapingDto.getId())
                 .sum_text(scrapingDto.getSum_text())
                 .url(scrapingDto.getUrl())
                 .build();
