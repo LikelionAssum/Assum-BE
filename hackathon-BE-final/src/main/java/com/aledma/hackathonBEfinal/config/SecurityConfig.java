@@ -19,9 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeHttpRequests().requestMatchers(
-                        new AntPathRequestMatcher("/**")
-                ).permitAll()
+                .authorizeHttpRequests()
+                .antMatchers("/**")
+                //.requestMatchers(new AntPathRequestMatcher("/**"))
+                .permitAll()
                 .and()
                 // CORS 설정
                 .cors(c -> {

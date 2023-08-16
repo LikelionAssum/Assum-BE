@@ -27,7 +27,7 @@ public class User {
     private String password;
 
     // CascadeType.ALL 설정 해야하나?
-    @OneToMany(mappedBy = "user", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
 
     public static User of(UserDto userDto){
