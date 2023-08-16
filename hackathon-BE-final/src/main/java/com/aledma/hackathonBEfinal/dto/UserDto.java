@@ -13,8 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class UserDto {
 
-    private Long id;
-
     @NotEmpty(message = "이메일은 필수 값 입니다.")
     private String email;
 
