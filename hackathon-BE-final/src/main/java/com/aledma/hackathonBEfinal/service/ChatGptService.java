@@ -1,6 +1,9 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.aledma.hackathonBEfinal.domain.WebScraping;
+import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
+import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +25,15 @@ import org.json.JSONObject;
 @Service
 public class ChatGptService {
 
+    private final WebScrapingRepository webScrapingRepository;
+
     @Value("${chatgpt.api.endpoint}")
     private String chatGptApiEndpoint;
 
     @Value("${chatgpt.api.key}")
     private String chatGptApiKey;
 
-    public String summarizeText(String inputText) throws IOException {
+    public String summarizeText(String url, String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -69,10 +74,17 @@ public class ChatGptService {
         String responseBody = response.getBody();
         String generatedText = extractGeneratedText(responseBody);
 
+        // 요약된 텍스트까지 합쳐서 DB에 저장
+        WebScrapingDto responseDto = new WebScrapingDto();
+        responseDto.setUrl(url);
+        responseDto.setSum_text(generatedText);
+        WebScraping webScraping = WebScraping.of(responseDto);
+        this.webScrapingRepository.save(webScraping);
+        
         return generatedText;
     }
 
-    private String extractGeneratedText(String responseBody) throws IOException {
+    public String extractGeneratedText(String responseBody) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 

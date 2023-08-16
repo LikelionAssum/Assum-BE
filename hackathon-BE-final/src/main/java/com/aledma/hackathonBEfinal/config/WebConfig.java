@@ -15,9 +15,10 @@ public class WebConfig implements WebMvcConfigurer {
     // allowedOrigins에 프론트 서버 도메인이 들어가면 될거 같은 느낌?
     // 현재는 전부 허용
 
+    @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") 
+                .allowedOriginPatterns("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
                 .allowCredentials(true);
     }

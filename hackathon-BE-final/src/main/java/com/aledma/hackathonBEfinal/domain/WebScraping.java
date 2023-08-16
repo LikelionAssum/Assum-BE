@@ -19,8 +19,12 @@ public class WebScraping {
     @Column
     private String url;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String sum_text;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()

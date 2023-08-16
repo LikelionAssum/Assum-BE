@@ -21,7 +21,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("assum(어썸) 해커톤 Swagger UI")
                 .version("1.0.0")
-                .description("해커톤 Swagger으로 Api 실행")
+                .description("해커톤 Swagger")
                 .build();
     }
 
