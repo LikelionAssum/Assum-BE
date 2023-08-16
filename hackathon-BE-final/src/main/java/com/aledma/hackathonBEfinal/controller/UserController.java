@@ -22,7 +22,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @ApiOperation(value = "text 추출", notes = "url에서 text를 추출하는 api")
+    @ApiOperation(value = "회원가입", notes = "회원가입 api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원가입 성공"),
             @ApiResponse(code = 400, message = "회원가입 실패")
