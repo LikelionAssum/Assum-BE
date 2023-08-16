@@ -20,7 +20,15 @@ public class UserService {
 
     public void signUp(UserDto userDto){
         User user = User.of(userDto);
-        this.userRepository.save(user);
+        String email = user.getEmail();
+
+        Optional<User> findUser = this.userRepository.findByEmail(email);
+
+        if (findUser.isPresent()){
+            throw new DataNotFoundException("이미 존재하는 데이터입니다.");
+        } else {
+            this.userRepository.save(user);
+        }
     }
 
     public Long login(UserDto userDto){
