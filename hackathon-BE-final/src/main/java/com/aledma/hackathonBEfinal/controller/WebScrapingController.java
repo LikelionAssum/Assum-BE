@@ -32,7 +32,7 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
     @PostMapping("/url")
-    public ResponseEntity<String> extractText(@RequestParam("url") String url) {
+    public ResponseEntity<String> extractText(String url) {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
             String sum_text = this.chatGptService.summarizeText(url, text);
