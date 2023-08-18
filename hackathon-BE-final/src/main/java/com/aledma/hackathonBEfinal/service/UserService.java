@@ -5,8 +5,10 @@ import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.UserDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.repository.UserRepository;
+import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -18,6 +20,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    //추가
+    private final WebScrapingRepository webScrapingRepository;
+
+    @Transactional
     public void signUp(UserDto userDto){
         User user = User.of(userDto);
         String email = user.getEmail();
@@ -31,6 +37,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public Long login(UserDto userDto){
         User user = User.of(userDto);
         String email = user.getEmail();
@@ -42,11 +49,28 @@ public class UserService {
         return findUser.getId();
     }
 
+    @Transactional
     public List<WebScraping> getUserwebscrapingList(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new DataNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new DataNotFoundException("해당 id로 찾을 수 없습니다 : " + userId));
 
         return user.getWebScrapings();
     }
+
+
+
+    // 아래 두개 메소드 추가
+//    public void addWebScrapingToFavorites(Long userId, Long webScrapingId) {
+//        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//        WebScraping webScraping = webScrapingRepository.findById(webScrapingId).orElseThrow(() -> new EntityNotFoundException("WebScraping not found"));
+//
+//        user.getFavoriteWebScrapings().add(webScraping);
+//        userRepository.save(user);
+//    }
+//
+//    public List<WebScraping> getFavoriteWebScrapings(Long userId) {
+//        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//        return user.getFavoriteWebScrapings();
+//    }
 
 }

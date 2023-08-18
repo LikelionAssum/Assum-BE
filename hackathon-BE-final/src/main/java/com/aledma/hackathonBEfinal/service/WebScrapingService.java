@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +24,11 @@ public class WebScrapingService {
         String text = document.body().text().trim().replaceAll("\\s+", " ");;
         return text;
     }
+
+    // repository에서 만든 jpa 메소드 실행
+//    public List<WebScraping> searchWebScrapingsByUserIdAndKeyword(Long userId, String keyword) {
+//        return webScrapingRepository.findByUserIdAndSumTextContainingKeyword(userId, keyword);
+//    }
 }
 
 // db에 결과물 저장해놓기

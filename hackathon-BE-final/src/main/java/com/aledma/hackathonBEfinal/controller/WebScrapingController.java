@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.controller;
 
 import com.aledma.hackathonBEfinal.domain.WebScraping;
+import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.ChatGptService;
 import com.aledma.hackathonBEfinal.service.WebScrapingService;
 import io.swagger.annotations.Api;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
@@ -36,7 +38,6 @@ public class WebScrapingController {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
             String sum_text = this.chatGptService.summarizeText(url, text);
-            System.out.println(sum_text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,5 +45,20 @@ public class WebScrapingController {
         }
     }
 
+//    @ApiOperation(value = "사용자가 가진 것중 검색", notes = "user가 가진 WebScraping중 필요한 것만 검색하는 api")
+//    @ApiResponses({
+//            @ApiResponse(code = 200, message = "검색 성공"),
+//            @ApiResponse(code = 400, message = "검색 실패, 코드 문제일 수도 있음")
+//    })
+//    @GetMapping("/{userId}/search")
+//    public ResponseEntity<List<WebScraping>> searchWebScrapings(@PathVariable Long userId, @RequestParam String keyword) {
+//        try{
+//            List<WebScraping> searchList = webScrapingService.searchWebScrapingsByUserIdAndKeyword(userId, keyword);
+//            return new ResponseEntity<>(searchList, HttpStatus.OK);
+//        }catch (DataNotFoundException e) {
+//            e.printStackTrace();
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }

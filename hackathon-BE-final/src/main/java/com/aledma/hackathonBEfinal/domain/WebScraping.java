@@ -5,6 +5,8 @@ import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,7 +18,7 @@ public class WebScraping {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(columnDefinition = "LONGTEXT")
     private String url;
 
     @Column(columnDefinition = "LONGTEXT")
@@ -25,6 +27,10 @@ public class WebScraping {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+//    //추가
+//    @ManyToMany(mappedBy = "favoriteWebScrapings")
+//    private List<User> favoritedByUsers = new ArrayList<>();
 
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()

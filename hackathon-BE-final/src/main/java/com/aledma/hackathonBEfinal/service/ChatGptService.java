@@ -11,15 +11,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 @RequiredArgsConstructor
 @Service
@@ -33,12 +31,13 @@ public class ChatGptService {
     @Value("${chatgpt.api.key}")
     private String chatGptApiKey;
 
+    @Transactional
     public String summarizeText(String url, String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
 
-        int maxOutputTokens = 1500;
+        int maxOutputTokens = 1800;
 
         Map<String, Object> requestJson = new HashMap<>();
         requestJson.put("model", "gpt-3.5-turbo-16k");
@@ -54,9 +53,9 @@ public class ChatGptService {
         userMessage.put("role", "user");
         userMessage.put("content", "다음 문자열을 최대한 많이 요약해서 알려줘\n " +
                 "이때 문자열내에서 제목, 키워드 4개도 찾아서 알려줘. 응답의 형식은\n" +
-                " 제목 : \n" +
-                "키워드 : \n" +
-                "요약글 : \n 이런 형식으로 해줘.\n" + inputText);
+                " 제목: \n" +
+                "키워드: \n" +
+                "요약글: 이런 형식으로 해줘." + inputText);
 
         messages.add(userMessage);
 
@@ -95,7 +94,7 @@ public class ChatGptService {
             String generatedText = message.get("content").asText();
             return generatedText;
         } else {
-            return "No generated text available";
+            return "생성된 문자열이 없습니다.";
         }
     }
 
