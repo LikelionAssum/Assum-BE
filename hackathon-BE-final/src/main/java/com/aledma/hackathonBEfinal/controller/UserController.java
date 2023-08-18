@@ -74,9 +74,7 @@ public class UserController {
         List<WebScraping> list = userService.getUserwebscrapingList(userId);
 
         // 최근 파일 5개 불러오기
-        int startIndex = Math.max(0, list.size() - 5); // 최근 5개 파일의 시작 인덱스
-        List<WebScraping> recentList = list.subList(startIndex, list.size());
-
+        List<WebScraping> recentList = list.subList(list.size() - 4, list.size());
         return new ResponseEntity<>(recentList, HttpStatus.OK);
     }
 
