@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Builder
 @Entity
 public class User {
@@ -30,14 +31,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
 
-    //추가
-//    @ManyToMany
-//    @JoinTable(
-//            name = "user_favorite_webscrapings",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "web_scraping_id")
-//    )
-//    private List<WebScraping> favoriteWebScrapings = new ArrayList<>();
 
     public static User of(UserDto userDto){
         return User.builder()

@@ -1,8 +1,10 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
+import com.aledma.hackathonBEfinal.repository.UserRepository;
 import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,16 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class ChatGptService {
 
     private final WebScrapingRepository webScrapingRepository;
+    //추가
+    private final UserRepository userRepository;
 
     @Value("${chatgpt.api.endpoint}")
     private String chatGptApiEndpoint;
@@ -32,7 +33,7 @@ public class ChatGptService {
     private String chatGptApiKey;
 
     @Transactional
-    public String summarizeText(String url, String inputText) throws IOException {
+    public String summarizeText(Long id, String url, String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -60,6 +61,7 @@ public class ChatGptService {
         messages.add(userMessage);
 
         requestJson.put("messages", messages);
+
         // 맥시멈 토큰 수 제한
         requestJson.put("max_tokens", maxOutputTokens);
 
@@ -73,13 +75,36 @@ public class ChatGptService {
         String responseBody = response.getBody();
         String generatedText = extractGeneratedText(responseBody);
 
-        // 요약된 텍스트까지 합쳐서 DB에 저장
-        WebScrapingDto responseDto = new WebScrapingDto();
-        responseDto.setUrl(url);
-        responseDto.setSum_text(generatedText);
-        WebScraping webScraping = WebScraping.of(responseDto);
-        this.webScrapingRepository.save(webScraping);
-        
+        if (id == null) {
+            WebScrapingDto responseDto = new WebScrapingDto();
+            responseDto.setUrl(url);
+            responseDto.setSum_text(generatedText);
+            WebScraping webScraping = WebScraping.of(responseDto);
+            this.webScrapingRepository.save(webScraping);
+        }else {
+            Optional<User> user = this.userRepository.findById(id);
+            User findUser = user.get();
+
+            // 요약된 텍스트까지 합쳐서 DB에 저장, 개개인 User 별로 WebScraping 저장
+            WebScrapingDto responseDto = new WebScrapingDto();
+            responseDto.setUrl(url);
+            responseDto.setSum_text(generatedText);
+            WebScraping webScraping = WebScraping.of(responseDto);
+            webScraping.setUser(findUser);
+            this.webScrapingRepository.save(webScraping);
+        }
+
+        // 개개인의 list에 추가하는 코드
+//        Optional<User> user = this.userRepository.findById(id);
+//        User findUser = user.get();
+
+        // 요약된 텍스트까지 합쳐서 DB에 저장, 개개인 User 별로 WebScraping 저장
+//        WebScrapingDto responseDto = new WebScrapingDto();
+//        responseDto.setUrl(url);
+//        responseDto.setSum_text(generatedText);
+//        WebScraping webScraping = WebScraping.of(responseDto);
+//        webScraping.setUser(findUser);
+//        this.webScrapingRepository.save(webScraping);
         return generatedText;
     }
 

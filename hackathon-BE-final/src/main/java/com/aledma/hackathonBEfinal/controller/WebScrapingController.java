@@ -33,11 +33,11 @@ public class WebScrapingController {
             @ApiResponse(code = 200, message = "텍스트 추출 성공"),
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
-    @PostMapping("/url")
-    public ResponseEntity<String> extractText(String url) {
+    @PostMapping("/{userId}/url")
+    public ResponseEntity<String> extractText(@PathVariable Long id, String url) {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
-            String sum_text = this.chatGptService.summarizeText(url, text);
+            String sum_text = this.chatGptService.summarizeText(id, url, text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

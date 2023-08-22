@@ -29,11 +29,11 @@ public class UserController {
             @ApiResponse(code = 400, message = "회원가입 실패")
     })
     @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody UserDto userDto){
+    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
         try {
             this.userService.signUp(userDto);
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -45,11 +45,11 @@ public class UserController {
             @ApiResponse(code = 400, message = "로그인 실패")
     })
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody UserDto userDto){
+    public ResponseEntity<Long> login(@RequestBody UserDto userDto) {
         try {
             Long id = this.userService.login(userDto);
             return new ResponseEntity<>(id, HttpStatus.OK);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -72,12 +72,19 @@ public class UserController {
     @GetMapping("/{userId}/home")
     public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@PathVariable Long userId) {
         List<WebScraping> list = userService.getUserwebscrapingList(userId);
-
-        // 최근 파일 5개 불러오기
-        List<WebScraping> recentList = list.subList(list.size() - 4, list.size());
-        return new ResponseEntity<>(recentList, HttpStatus.OK);
+        try {
+            // 최근 파일 5개 불러오기
+            List<WebScraping> recentList = list.subList(list.size() - 4, list.size());
+            return new ResponseEntity<>(recentList, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 예외 발생은 인덱스 바운드에서 나니까 5개보다 적을 경우를 의미, 따라서 list 자체를 반환
+            return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        }
     }
 
+
+//  아마 백엔드쪽에서 유저 id를 쉽게 가져오는 방법인 것 같음.
 //    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //    Long userId = ((UserDetails) authentication.getPrincipal()).getId();
 //

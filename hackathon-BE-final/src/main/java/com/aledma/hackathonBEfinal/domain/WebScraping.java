@@ -26,11 +26,9 @@ public class WebScraping {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @Setter
     private User user;
 
-//    //추가
-//    @ManyToMany(mappedBy = "favoriteWebScrapings")
-//    private List<User> favoritedByUsers = new ArrayList<>();
 
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()
