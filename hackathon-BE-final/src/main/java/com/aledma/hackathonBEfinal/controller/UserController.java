@@ -57,17 +57,24 @@ public class UserController {
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "리스트 가져오기 성공")
+            @ApiResponse(code = 200, message = "리스트 가져오기 성공"),
+            @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/{userId}/all")
     public ResponseEntity<List<WebScraping>> getUserQuestions(@PathVariable Long userId) {
-        List<WebScraping> list = userService.getUserwebscrapingList(userId);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        try{
+            List<WebScraping> list = userService.getUserwebscrapingList(userId);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }catch (DataNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @ApiOperation(value = "WebScraping list 최근파일 5개", notes = "WebScraping Recent list api")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "리스트 가져오기 성공")
+            @ApiResponse(code = 200, message = "리스트 가져오기 성공"),
+            @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/{userId}/home")
     public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@PathVariable Long userId) {
@@ -76,7 +83,7 @@ public class UserController {
             // 최근 파일 5개 불러오기
             List<WebScraping> recentList = list.subList(list.size() - 4, list.size());
             return new ResponseEntity<>(recentList, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (DataNotFoundException e) {
             e.printStackTrace();
             // 예외 발생은 인덱스 바운드에서 나니까 5개보다 적을 경우를 의미, 따라서 list 자체를 반환
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);

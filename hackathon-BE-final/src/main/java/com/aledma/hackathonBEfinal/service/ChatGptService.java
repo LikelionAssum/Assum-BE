@@ -94,10 +94,6 @@ public class ChatGptService {
             this.webScrapingRepository.save(webScraping);
         }
 
-        // 개개인의 list에 추가하는 코드
-//        Optional<User> user = this.userRepository.findById(id);
-//        User findUser = user.get();
-
         // 요약된 텍스트까지 합쳐서 DB에 저장, 개개인 User 별로 WebScraping 저장
 //        WebScrapingDto responseDto = new WebScrapingDto();
 //        responseDto.setUrl(url);

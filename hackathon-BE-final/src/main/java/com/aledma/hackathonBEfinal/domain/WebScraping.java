@@ -2,6 +2,8 @@ package com.aledma.hackathonBEfinal.domain;
 
 
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지
 public class WebScraping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
