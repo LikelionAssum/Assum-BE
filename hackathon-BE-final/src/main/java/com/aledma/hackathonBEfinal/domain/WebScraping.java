@@ -5,8 +5,10 @@ import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지, 양쪽 모두 직렬화를 유지
 public class WebScraping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +33,18 @@ public class WebScraping {
     @JoinColumn(name = "user_id")
     @Setter
     private User user;
+    
+    // 생성일자 추가
+    @CreatedDate
+    @Column
+    private LocalDateTime createDate;
 
 
     public static WebScraping of(WebScrapingDto scrapingDto){
         return WebScraping.builder()
                 .sum_text(scrapingDto.getSum_text())
                 .url(scrapingDto.getUrl())
+                .createDate((scrapingDto.getCreateDate())) // 추가
                 .build();
     }
 

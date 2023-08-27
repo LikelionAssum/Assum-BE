@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,5 +20,7 @@ public class WebScrapingDto {
     private String url;
 
     private String sum_text;
+
+    private LocalDateTime createDate;
 
 }

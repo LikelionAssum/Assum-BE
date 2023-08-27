@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지, 양쪽 모두 직렬화를 유지
 public class User {
 
     @Id
