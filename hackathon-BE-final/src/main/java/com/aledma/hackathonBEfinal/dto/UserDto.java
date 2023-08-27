@@ -18,4 +18,6 @@ public class UserDto {
 
     @NotEmpty(message = "비밀번호는 필수 값 입니다.")
     private String password;
+
+    private int age;
 }

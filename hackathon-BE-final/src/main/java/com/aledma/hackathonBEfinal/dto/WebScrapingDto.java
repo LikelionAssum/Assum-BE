@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
@@ -15,12 +16,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class WebScrapingDto {
 
-    @NotEmpty(message = "Url은 필수 입력 값입니다.")
-    // url 정규표현식 어떻게 구현?
-    private String url;
+    private String title;
 
-    private String sum_text;
+    private String[] keyword;
 
-    private LocalDateTime createDate;
+    private String text;
+
+    // url
+    private String link;
 
 }

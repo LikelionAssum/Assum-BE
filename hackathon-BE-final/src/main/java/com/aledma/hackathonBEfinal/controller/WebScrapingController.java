@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.controller;
 
 import com.aledma.hackathonBEfinal.domain.WebScraping;
+import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.ChatGptService;
 import com.aledma.hackathonBEfinal.service.WebScrapingService;
@@ -37,13 +38,32 @@ public class WebScrapingController {
     public ResponseEntity<String> extractText(@PathVariable Long userId, String url) {
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
-            String sum_text = this.chatGptService.summarizeText(userId, url, text);
+            String sum_text = this.chatGptService.summarizeText(userId, text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @ApiOperation(value = "정리된 text 저장하기 버튼", notes = "정리된 텍스트 저장하는 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "정리된 텍스트 저장 성공"),
+            @ApiResponse(code = 400, message = "정리된 텍스트 저장 실패, 코드 오류 확인할 것, 서버 잘못일 가능성이 높음")
+    })
+    @PostMapping("/{userId}/save")
+    public ResponseEntity<?> saveOrganizeTextInDb(@PathVariable Long userId,
+                                                  WebScrapingDto webScrapingDto){
+        try {
+            this.webScrapingService.saveOrganizeText(userId, webScrapingDto);
+            return new ResponseEntity<>("저장에 성공하였습니다.", HttpStatus.OK);
+        }catch (DataNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>("저장에 실패하였습니다.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 //    @ApiOperation(value = "사용자가 가진 것중 검색", notes = "user가 가진 WebScraping중 필요한 것만 검색하는 api")
 //    @ApiResponses({

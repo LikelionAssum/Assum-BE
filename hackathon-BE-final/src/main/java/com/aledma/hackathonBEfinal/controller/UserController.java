@@ -81,7 +81,7 @@ public class UserController {
         List<WebScraping> list = userService.getUserwebscrapingList(userId);
         try {
             // 최근 파일 5개 불러오기
-            List<WebScraping> recentList = list.subList(list.size() - 4, list.size());
+            List<WebScraping> recentList = list.subList(list.size() - 5, list.size());
             return new ResponseEntity<>(recentList, HttpStatus.OK);
         } catch (DataNotFoundException e) {
             e.printStackTrace();

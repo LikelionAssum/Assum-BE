@@ -33,7 +33,7 @@ public class ChatGptService {
     private String chatGptApiKey;
 
     @Transactional
-    public String summarizeText(Long id, String url, String inputText) throws IOException {
+    public String summarizeText(Long id, String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -75,35 +75,11 @@ public class ChatGptService {
         String responseBody = response.getBody();
         String generatedText = extractGeneratedText(responseBody);
 
-        if (id == null) {
-            WebScrapingDto responseDto = new WebScrapingDto();
-            responseDto.setUrl(url);
-            responseDto.setSum_text(generatedText);
-            WebScraping webScraping = WebScraping.of(responseDto);
-            this.webScrapingRepository.save(webScraping);
-        }else {
-            Optional<User> user = this.userRepository.findById(id);
-            User findUser = user.get();
-
-            // 요약된 텍스트까지 합쳐서 DB에 저장, 개개인 User 별로 WebScraping 저장
-            WebScrapingDto responseDto = new WebScrapingDto();
-            responseDto.setUrl(url);
-            responseDto.setSum_text(generatedText);
-            WebScraping webScraping = WebScraping.of(responseDto);
-            webScraping.setUser(findUser);
-            this.webScrapingRepository.save(webScraping);
-        }
-
-        // 요약된 텍스트까지 합쳐서 DB에 저장, 개개인 User 별로 WebScraping 저장
-//        WebScrapingDto responseDto = new WebScrapingDto();
-//        responseDto.setUrl(url);
-//        responseDto.setSum_text(generatedText);
-//        WebScraping webScraping = WebScraping.of(responseDto);
-//        webScraping.setUser(findUser);
-//        this.webScrapingRepository.save(webScraping);
         return generatedText;
     }
 
+
+    // json에서 chat gpt 응답만 뽑아오는 코드, 안읽어봐도돼!
     public String extractGeneratedText(String responseBody) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);

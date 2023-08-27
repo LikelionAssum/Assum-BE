@@ -30,6 +30,9 @@ public class User {
     @Column
     private String password;
 
+    @Column
+    private int age;
+
     // CascadeType.ALL 설정 해야하나?
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
@@ -39,6 +42,7 @@ public class User {
         return User.builder()
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
+                .age(userDto.getAge())
                 .build();
     }
 }
