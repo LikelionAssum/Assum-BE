@@ -1,9 +1,11 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.aledma.hackathonBEfinal.domain.Keyword;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
+import com.aledma.hackathonBEfinal.repository.KeywordRepository;
 import com.aledma.hackathonBEfinal.repository.UserRepository;
 import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class ChatGptService {
     private final WebScrapingRepository webScrapingRepository;
     //추가
     private final UserRepository userRepository;
+    private final KeywordRepository keywordRepository;
 
     @Value("${chatgpt.api.endpoint}")
     private String chatGptApiEndpoint;
@@ -75,6 +79,21 @@ public class ChatGptService {
         String responseBody = response.getBody();
         String generatedText = extractGeneratedText(responseBody);
 
+        //키워드 배열형태로 추출한 후 db에 넣어 줌
+
+        String[] keywords = extractKeywordsArray(generatedText);
+        Keyword keyword = new Keyword();
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("user id 오류"));
+        keyword.setKeyword1(keywords[0]);
+        keyword.setKeyword2(keywords[1]);
+        keyword.setKeyword3(keywords[2]);
+        keyword.setKeyword4(keywords[3]);
+        keyword.setKeywordDate(LocalDateTime.now());
+        keyword.setAge(user.getAge());
+
+        keywordRepository.save(keyword);
+
         return generatedText;
     }
 
@@ -95,6 +114,19 @@ public class ChatGptService {
         }
     }
 
+    //generatedText에서 키워드 추출하는 함수
+    public String[] extractKeywordsArray(String inputText) {
+        String[] lines = inputText.split("\n");
+
+        for (String line : lines) {
+            if (line.startsWith("키워드:")) {
+                String keywords = line.substring("키워드:".length()).trim();
+                return keywords.split(",\\s*"); // ,로 분리
+            }
+        }
+
+        return new String[0]; // 아무 키워드 없을 시 빈 배열 반환
+    }
 }
 
 
