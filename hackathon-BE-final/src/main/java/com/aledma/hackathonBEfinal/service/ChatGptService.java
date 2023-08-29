@@ -81,7 +81,7 @@ public class ChatGptService {
 
         //키워드 배열형태로 추출한 후 db에 넣어 줌
 
-        String[] keywords = extractKeywordsArray(inputText);
+        String[] keywords = extractKeywordsArray(generatedText);
         Keyword keyword = new Keyword();
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("user id 오류"));
