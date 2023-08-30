@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class KeywordService {
-    private KeywordRepository keywordRepository;
+    private final KeywordRepository keywordRepository;
 
     public List<AgeKeywordRankDTO> getKeywordRanking(){
         LocalDateTime dayAgo = LocalDateTime.now().minusHours(24);
