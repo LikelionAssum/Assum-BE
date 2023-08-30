@@ -3,6 +3,7 @@ package com.aledma.hackathonBEfinal.controller;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.UserDto;
+import com.aledma.hackathonBEfinal.dto.UserLoginDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.UserService;
 import io.swagger.annotations.Api;
@@ -45,9 +46,9 @@ public class UserController {
             @ApiResponse(code = 400, message = "로그인 실패")
     })
     @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<Long> login(@RequestBody UserLoginDto loginDto) {
         try {
-            Long id = this.userService.login(userDto);
+            Long id = this.userService.login(loginDto);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

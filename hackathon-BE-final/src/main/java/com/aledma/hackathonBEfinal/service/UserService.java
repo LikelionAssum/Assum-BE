@@ -3,6 +3,7 @@ package com.aledma.hackathonBEfinal.service;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.UserDto;
+import com.aledma.hackathonBEfinal.dto.UserLoginDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.repository.UserRepository;
 import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
@@ -38,8 +39,8 @@ public class UserService {
     }
 
     @Transactional
-    public Long login(UserDto userDto){
-        User user = User.of(userDto);
+    public Long login(UserLoginDto loginDto){
+        User user = User.of(loginDto);
         String email = user.getEmail();
         String password = user.getPassword();
 
