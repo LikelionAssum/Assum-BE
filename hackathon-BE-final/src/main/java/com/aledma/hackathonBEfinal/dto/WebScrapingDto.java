@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -18,11 +15,14 @@ public class WebScrapingDto {
 
     private String title;
 
-    private String[] keyword;
+    private String[] keyword = new String[4];
 
     private String text;
 
     // url
     private String link;
+
+    //추가
+    private UserDto user;
 
 }

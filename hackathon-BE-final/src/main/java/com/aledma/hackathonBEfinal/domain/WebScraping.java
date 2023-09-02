@@ -3,6 +3,7 @@ package com.aledma.hackathonBEfinal.domain;
 
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -29,7 +30,7 @@ public class WebScraping {
     private String title;
 
     @Column
-    private String[] keyword;
+    private String[] keyword = new String[4];
 
     @Column(columnDefinition = "LONGTEXT")
     private String text;

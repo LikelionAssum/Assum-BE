@@ -42,13 +42,6 @@ public class WebScrapingService {
         WebScraping webScraping = WebScraping.of(scrapingDto);
         webScraping.setUser(user);
         webScraping.setCreateDate(LocalDateTime.now());
-
-        /*
-        이 부분에 webScraping에 저장된 createDate랑, keyword 배열 / id를 통해서 user의 age를 가져와서
-        새로운 keyword entity 만든것에 저장하면 될듯? 아마
-         */
-        
-        
         this.webScrapingRepository.save(webScraping);
 
     }

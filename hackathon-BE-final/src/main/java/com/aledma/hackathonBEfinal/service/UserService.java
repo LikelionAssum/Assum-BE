@@ -4,6 +4,7 @@ import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.UserDto;
 import com.aledma.hackathonBEfinal.dto.UserLoginDto;
+import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.repository.UserRepository;
 import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
@@ -12,8 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -50,15 +53,52 @@ public class UserService {
         return findUser.getId();
     }
 
-    @Transactional
-    public List<WebScraping> getUserwebscrapingList(Long userId) {
+    // 아래는 다 수정한 코드 dto 형식으로 오도록
+    public List<WebScrapingDto> getUserWebScrapingDtoList(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException("해당 id로 찾을 수 없습니다 : " + userId));
 
-        return user.getWebScrapings();
+        List<WebScraping> webScrapings = user.getWebScrapings();
+
+        // WebScraping 엔티티를 WebScrapingDto로 매핑
+        List<WebScrapingDto> webScrapingDtos = webScrapings.stream()
+                .map(this::mapToWebScrapingDto)
+                .collect(Collectors.toList());
+
+        return webScrapingDtos;
     }
 
+    private WebScrapingDto mapToWebScrapingDto(WebScraping webScraping) {
+        WebScrapingDto dto = new WebScrapingDto();;
+        dto.setTitle(webScraping.getTitle());
+        dto.setKeyword(webScraping.getKeyword());
+        dto.setText(webScraping.getText());
+        dto.setLink(webScraping.getLink());
 
+        // User 엔티티를 UserDto로 매핑
+        UserDto userDto = mapToUserDto(webScraping.getUser());
+        dto.setUser(userDto);
+
+        return dto;
+    }
+
+    private UserDto mapToUserDto(User user) {
+        UserDto dto = new UserDto();
+        dto.setEmail(user.getEmail());
+        dto.setPassword(user.getPassword());
+        dto.setAge(user.getAge());
+        return dto;
+    }
+}
+
+
+//    @Transactional
+//    public List<WebScraping> getUserwebscrapingList(Long userId) {
+//        User user = userRepository.findById(userId)
+//                .orElseThrow(() -> new DataNotFoundException("해당 id로 찾을 수 없습니다 : " + userId));
+//
+//        return user.getWebScrapings();
+//    }
 
     // 아래 두개 메소드 추가
 //    public void addWebScrapingToFavorites(Long userId, Long webScrapingId) {
@@ -74,4 +114,4 @@ public class UserService {
 //        return user.getFavoriteWebScrapings();
 //    }
 
-}
+
