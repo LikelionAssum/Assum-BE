@@ -53,7 +53,7 @@ public class WebScrapingController {
     })
     @PostMapping("/{userId}/save")
     public ResponseEntity<?> saveOrganizeTextInDb(@PathVariable Long userId,
-                                                  WebScrapingDto webScrapingDto){
+                                                  @RequestBody WebScrapingDto webScrapingDto){
         try {
             this.webScrapingService.saveOrganizeText(userId, webScrapingDto);
             return new ResponseEntity<>("저장에 성공하였습니다.", HttpStatus.OK);
