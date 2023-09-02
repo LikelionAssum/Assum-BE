@@ -25,4 +25,11 @@ public class KeywordController {
 
         return ResponseEntity.ok(ageKeywordRankDTO);
     }
+
+    @GetMapping("/keywordTotalRanking")
+    public ResponseEntity<List<AgeKeywordRankDTO>> getTotalKeywordRanking(){
+        List<AgeKeywordRankDTO> ageKeywordRankDTO =keywordService.getTotalKeywordRanking();
+
+        return ResponseEntity.ok(ageKeywordRankDTO);
+    }
 }

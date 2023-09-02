@@ -59,4 +59,42 @@ public class KeywordService {
         return ageKeywordRanks;
 
     }
+
+    public List<AgeKeywordRankDTO> getTotalKeywordRanking() {
+        List<Keyword> allKeywords = keywordRepository.findAll();
+
+        Map<String, Long> totalKeywordCountMap = new HashMap<>();
+
+        for (Keyword keyword : allKeywords) {
+            String[] keywordArray = {keyword.getKeyword1(), keyword.getKeyword2(), keyword.getKeyword3(), keyword.getKeyword4()};
+
+            for (String keywordStr : keywordArray) {
+                if (keywordStr != null && !keywordStr.isEmpty()) {
+                    totalKeywordCountMap.merge(keywordStr, 1L, Long::sum);
+                }
+            }
+        }
+
+        AgeKeywordRankDTO totalAgeKeywordRank = new AgeKeywordRankDTO();
+        totalAgeKeywordRank.setAge(0);
+
+        List<KeywordRankDTO> totalKeywordRanks = totalKeywordCountMap.entrySet().stream()
+                .map(entry -> {
+                    KeywordRankDTO keywordRank = new KeywordRankDTO();
+                    keywordRank.setKeyword(entry.getKey());
+                    keywordRank.setCount(entry.getValue());
+                    return keywordRank;
+                })
+                .sorted(Comparator.comparingLong(KeywordRankDTO::getCount).reversed())
+                .collect(Collectors.toList());
+
+        totalAgeKeywordRank.setKeywordRanks(totalKeywordRanks);
+
+        List<AgeKeywordRankDTO> ageKeywordRanks = new ArrayList<>();
+        ageKeywordRanks.add(totalAgeKeywordRank);
+
+        return ageKeywordRanks;
+    }
+
+
 }
