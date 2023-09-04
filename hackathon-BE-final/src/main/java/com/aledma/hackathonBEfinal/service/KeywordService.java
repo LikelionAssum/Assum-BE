@@ -61,7 +61,9 @@ public class KeywordService {
     }
 
     public List<AgeKeywordRankDTO> getTotalKeywordRanking() {
-        List<Keyword> allKeywords = keywordRepository.findAll();
+        LocalDateTime dayAgo = LocalDateTime.now().minusHours(24);
+        List<Keyword> allKeywords = keywordRepository.findByKeywordDateAfter(dayAgo);
+
 
         Map<String, Long> totalKeywordCountMap = new HashMap<>();
 
