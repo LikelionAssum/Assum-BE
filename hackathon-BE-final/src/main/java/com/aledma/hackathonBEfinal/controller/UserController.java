@@ -16,14 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(tags = "User", description = "User관련 로직 작성")
+
 @RequiredArgsConstructor
 @RestController
+@Api(tags = "User", description = "User관련 로직 작성")
 public class UserController {
 
     private final UserService userService;
 
-    @ApiOperation(value = "회원가입", notes = "회원가입 api")
+    /*@ApiOperation(value = "회원가입", notes = "회원가입 api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원가입 성공"),
             @ApiResponse(code = 400, message = "회원가입 실패")
@@ -53,7 +54,7 @@ public class UserController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
     @ApiResponses({
@@ -89,6 +90,8 @@ public class UserController {
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
 
 //  아마 백엔드쪽에서 유저 id를 쉽게 가져오는 방법인 것 같음.

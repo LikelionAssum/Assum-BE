@@ -23,7 +23,7 @@ public class UserService {
     //추가
     private final WebScrapingRepository webScrapingRepository;
 
-    @Transactional
+    /*@Transactional
     public void signUp(UserDto userDto){
         User user = User.of(userDto);
         String email = user.getEmail();
@@ -35,9 +35,9 @@ public class UserService {
         } else {
             this.userRepository.save(user);
         }
-    }
+    }*/
 
-    @Transactional
+    /*@Transactional
     public Long login(UserDto userDto){
         User user = User.of(userDto);
         String email = user.getEmail();
@@ -47,7 +47,7 @@ public class UserService {
         User findUser = optionalUser.orElseThrow(() -> new DataNotFoundException("회원정보 없음"));
 
         return findUser.getId();
-    }
+    }*/
 
     @Transactional
     public List<WebScraping> getUserwebscrapingList(Long userId) {

@@ -64,7 +64,6 @@ public class KeywordService {
         LocalDateTime dayAgo = LocalDateTime.now().minusHours(24);
         List<Keyword> allKeywords = keywordRepository.findByKeywordDateAfter(dayAgo);
 
-
         Map<String, Long> totalKeywordCountMap = new HashMap<>();
 
         for (Keyword keyword : allKeywords) {
