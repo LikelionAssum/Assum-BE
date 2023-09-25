@@ -24,9 +24,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class ChatGptService {
-
     private final WebScrapingRepository webScrapingRepository;
-    //추가
     private final UserRepository userRepository;
     private final KeywordRepository keywordRepository;
 
@@ -37,7 +35,7 @@ public class ChatGptService {
     private String chatGptApiKey;
 
     @Transactional
-    public String summarizeText(Long id, String inputText) throws IOException {
+    public String summarizeText(String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -48,11 +46,6 @@ public class ChatGptService {
         requestJson.put("model", "gpt-3.5-turbo-16k");
 
         List<Map<String, String>> messages = new ArrayList<>();
-
-        // 시스템 메세지 부여 삭제
-//        Map<String, String> systemMessage = new HashMap<>();
-//        systemMessage.put("role", "system");
-//        systemMessage.put("content", "Your role is to summarize");
 
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");
@@ -83,7 +76,7 @@ public class ChatGptService {
 
         String[] keywords = extractKeywordsArray(generatedText);
         Keyword keyword = new Keyword();
-        User user = userRepository.findById(id)
+        User user = userRepository.findById(id)  // 이 부분에서 id를 어디서 가져오는가?
                 .orElseThrow(() -> new IllegalArgumentException("user id 오류"));
         keyword.setKeyword1(keywords[0]);
         keyword.setKeyword2(keywords[1]);
@@ -98,7 +91,6 @@ public class ChatGptService {
     }
 
 
-    // json에서 chat gpt 응답만 뽑아오는 코드, 안읽어봐도돼!
     public String extractGeneratedText(String responseBody) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);

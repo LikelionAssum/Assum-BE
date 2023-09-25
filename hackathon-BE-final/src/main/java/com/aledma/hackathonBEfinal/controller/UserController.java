@@ -24,38 +24,6 @@ public class UserController {
 
     private final UserService userService;
 
-    /*@ApiOperation(value = "회원가입", notes = "회원가입 api")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "회원가입 성공"),
-            @ApiResponse(code = 400, message = "회원가입 실패")
-    })
-    @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
-        try {
-            this.userService.signUp(userDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @ApiOperation(value = "로그인", notes = "로그인 api")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "로그인 성공"),
-            @ApiResponse(code = 400, message = "로그인 실패")
-    })
-    @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody UserDto userDto) {
-        try {
-            Long id = this.userService.login(userDto);
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }*/
-
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "리스트 가져오기 성공"),
@@ -91,55 +59,44 @@ public class UserController {
         }
     }
 
-
-
-
 //  아마 백엔드쪽에서 유저 id를 쉽게 가져오는 방법인 것 같음.
 //    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //    Long userId = ((UserDetails) authentication.getPrincipal()).getId();
 //
 //    List<WebScraping> list = userService.getUserwebscrapingList(userId);
 //        return new RsssesponseEntity<>(list, HttpStatus.OK);
-//
+    
+    // 기존 로그인 방식
+     /*@ApiOperation(value = "회원가입", notes = "회원가입 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원가입 성공"),
+            @ApiResponse(code = 400, message = "회원가입 실패")
+    })
+    @PostMapping("/signUp")
+    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
+        try {
+            this.userService.signUp(userDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
-
-
-
-
-    //아래 두개 메소드 추가
-//    @ApiOperation(value = "즐겨찾기 추가", notes = "즐겨찾기 추가 api")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "즐겨찾기 추가 성공"),
-//            @ApiResponse(code = 400, message = "즐겨찾기 추가 실패")
-//    })
-//    @PostMapping("/{userId}/favorites/add")
-//    public ResponseEntity<String> addWebScrapingToFavorites(@PathVariable Long userId, @RequestParam Long webScrapingId) {
-//        try {
-//            userService.addWebScrapingToFavorites(userId, webScrapingId);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-//
-//    @ApiOperation(value = "즐겨찾기 리스트", notes = "즐겨찾기 리스트 api")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "즐겨찾기 리스트 보여주기 성공"),
-//            @ApiResponse(code = 400, message = "즐겨찾기 리스트 추출 실패")
-//    })
-//    @GetMapping("/{userId}/favorites")
-//    public ResponseEntity<List<WebScraping>> getFavoriteWebScrapings(@PathVariable Long userId) {
-//        try {
-//            List<WebScraping> favoriteWebScrapings = userService.getFavoriteWebScrapings(userId);
-//            return new ResponseEntity<>(favoriteWebScrapings, HttpStatus.OK);
-//        }catch (DataNotFoundException e){
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
-
-
-
+    @ApiOperation(value = "로그인", notes = "로그인 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "로그인 성공"),
+            @ApiResponse(code = 400, message = "로그인 실패")
+    })
+    @PostMapping("/login")
+    public ResponseEntity<Long> login(@RequestBody UserDto userDto) {
+        try {
+            Long id = this.userService.login(userDto);
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }*/
 
 }

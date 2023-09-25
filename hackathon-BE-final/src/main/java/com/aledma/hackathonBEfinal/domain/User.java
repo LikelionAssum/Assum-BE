@@ -24,14 +24,11 @@ public class User {
     private String email;
 
     @Column
-    private String password;
-
-    @Column
     private int age;
 
     private OAuthProvider oAuthProvider;
 
-    // CascadeType.ALL 설정 해야하나?
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
 

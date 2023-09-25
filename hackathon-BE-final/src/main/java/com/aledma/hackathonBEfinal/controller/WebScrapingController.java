@@ -35,10 +35,10 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
     @PostMapping("/{userId}/url")
-    public ResponseEntity<String> extractText(@PathVariable Long userId, String url) {
+    public ResponseEntity<String> extractText(String url) { //@PathVariable Long userId를 파라미터에서 삭제.
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
-            String sum_text = this.chatGptService.summarizeText(userId, text);
+            String sum_text = this.chatGptService.summarizeText(text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();

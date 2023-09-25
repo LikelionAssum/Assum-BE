@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class KakaoTokens {
+    /*
+    @JsonProperty 주석은 JSON 데이터의 필드와
+    Java 객체의 멤버 변수 간의 매핑을 지정하는 데 사용.
+     */
     @JsonProperty("access_token")
     private String accessToken;
 
