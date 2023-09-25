@@ -21,7 +21,7 @@ public class WebScrapingService {
     private final WebScrapingRepository webScrapingRepository;
     private final UserRepository userRepository;
 
-    // url로 부터 text 추출하고 DB에 저장
+    // url로 부터 text 추출
     public String extractTextFromUrl(String url) throws IOException {
         Document document = Jsoup.connect(url).get();
         String text = document.body().text().trim().replaceAll("\\s+", " ");

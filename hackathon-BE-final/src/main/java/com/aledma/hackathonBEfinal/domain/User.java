@@ -28,10 +28,8 @@ public class User {
 
     private OAuthProvider oAuthProvider;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
-
 
     @Builder
     public User(String email, OAuthProvider oAuthProvider) {

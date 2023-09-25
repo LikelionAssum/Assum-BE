@@ -4,30 +4,24 @@ import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.ChatGptService;
+import com.aledma.hackathonBEfinal.service.OAuthLoginService;
 import com.aledma.hackathonBEfinal.service.WebScrapingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URLEncoder;
-import java.util.List;
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
 @RequiredArgsConstructor
 @RestController
 public class WebScrapingController {
-
     private final WebScrapingService webScrapingService;
-
     private final ChatGptService chatGptService;
-
 
     @ApiOperation(value = "text추출", notes = "url에서 text를 추출하는 api")
     @ApiResponses({
@@ -62,8 +56,6 @@ public class WebScrapingController {
             return new ResponseEntity<>("저장에 실패하였습니다.", HttpStatus.BAD_REQUEST);
         }
     }
-
-
 
 //    @ApiOperation(value = "사용자가 가진 것중 검색", notes = "user가 가진 WebScraping중 필요한 것만 검색하는 api")
 //    @ApiResponses({

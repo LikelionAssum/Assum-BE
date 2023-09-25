@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.aledma.hackathonBEfinal.OAuth.OAuthInfoResponse;
 import com.aledma.hackathonBEfinal.domain.Keyword;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;

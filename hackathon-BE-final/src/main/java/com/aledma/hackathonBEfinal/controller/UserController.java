@@ -21,8 +21,14 @@ import java.util.List;
 @RestController
 @Api(tags = "User", description = "User관련 로직 작성")
 public class UserController {
-
     private final UserService userService;
+
+    // 로그인시 사용자 나이 저장하기 위한 api, 아직 사용자를 어떻게 가져올 지 모르겠음.
+    @PostMapping("/age")
+    public ResponseEntity<?> getAge(@RequestBody int age){
+        // to do 사용자 객체에 age 세팅하기
+        return null;
+    }
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
     @ApiResponses({
