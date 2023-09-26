@@ -9,7 +9,7 @@ spring:
         format_sql: 'true'
         show_sql: 'true'
   datasource:
-    password: aledma2351
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: admin
     url: jdbc:mysql://hackathondbfinal.cyiztsnfihih.ap-northeast-2.rds.amazonaws.com/hackathon
@@ -22,41 +22,10 @@ chatgpt:
 server:
   port: '80'
 jwt:
-  secret-key: Z29nby10bS1zZXJ2ZXItZGxyamVvYW9yb3JodG9kZ290c3Atam9vbmdhbmduaW0teWVvbHNpbWhpaGFsZ2VveW8K
+  secret-key:
 oauth:
   kakao:
-    client-id: e7260bfc8d5a3e9d59e673d85d1f9f7b
+    client-id:
     url:
       auth: https://kauth.kakao.com
       api: https://kapi.kakao.com
-#spring:
-#  jpa:
-#    database: mysql
-#    hibernate:
-#      ddl-auto: update
-#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-#    properties:
-#      hibernate:
-#        format_sql: 'true'
-#        show_sql: 'true'
-#  datasource:
-#    password:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    username: admin
-#    url: jdbc:mysql://hackathondbfinal.cyiztsnfihih.ap-northeast-2.rds.amazonaws.com/hackathon
-#chatgpt:
-#  api:
-#    endpoint: https://api.openai.com/v1/chat/completions
-#    key:
-#  tts:
-#    endpoint: https://api.openai.com/v1/tts/synthesize
-#server:
-#  port: '80'
-#jwt:
-#  secret-key:
-#oauth:
-#  kakao:
-#    client-id:
-#    url:
-#      auth: https://kauth.kakao.com
-#      api: https://kapi.kakao.com
