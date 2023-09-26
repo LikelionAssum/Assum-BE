@@ -1,10 +1,12 @@
 package com.aledma.hackathonBEfinal.controller;
 
+import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.ChatGptService;
 import com.aledma.hackathonBEfinal.service.OAuthLoginService;
+import com.aledma.hackathonBEfinal.service.UserService;
 import com.aledma.hackathonBEfinal.service.WebScrapingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,17 +24,21 @@ import org.springframework.web.bind.annotation.*;
 public class WebScrapingController {
     private final WebScrapingService webScrapingService;
     private final ChatGptService chatGptService;
+    private final UserService userService;
 
     @ApiOperation(value = "text추출", notes = "url에서 text를 추출하는 api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "텍스트 추출 성공"),
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
-    @PostMapping("/{userId}/url")
-    public ResponseEntity<String> extractText(String url) { //@PathVariable Long userId를 파라미터에서 삭제.
+    @PostMapping("/url")
+    public ResponseEntity<String> extractText(@RequestHeader("Authorization") String token,
+                                              String url) { //@PathVariable Long userId를 파라미터에서 삭제.
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
-            String sum_text = this.chatGptService.summarizeText(text);
+
+            String email = this.userService.getUserEmailToAccessToken(token);
+            String sum_text = this.chatGptService.summarizeText(email, text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -45,11 +51,12 @@ public class WebScrapingController {
             @ApiResponse(code = 200, message = "정리된 텍스트 저장 성공"),
             @ApiResponse(code = 400, message = "정리된 텍스트 저장 실패, 코드 오류 확인할 것, 서버 잘못일 가능성이 높음")
     })
-    @PostMapping("/{userId}/save")
-    public ResponseEntity<?> saveOrganizeTextInDb(@PathVariable Long userId,
+    @PostMapping("/save")
+    public ResponseEntity<?> saveOrganizeTextInDb(@RequestHeader("Authorization") String token,
                                                   WebScrapingDto webScrapingDto){
         try {
-            this.webScrapingService.saveOrganizeText(userId, webScrapingDto);
+            String email = this.userService.getUserEmailToAccessToken(token);
+            this.webScrapingService.saveOrganizeText(email, webScrapingDto);
             return new ResponseEntity<>("저장에 성공하였습니다.", HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();

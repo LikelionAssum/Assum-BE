@@ -36,7 +36,7 @@ public class ChatGptService {
     private String chatGptApiKey;
 
     @Transactional
-    public String summarizeText(String inputText) throws IOException {
+    public String summarizeText(String email, String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -77,8 +77,11 @@ public class ChatGptService {
 
         String[] keywords = extractKeywordsArray(generatedText);
         Keyword keyword = new Keyword();
-        User user = userRepository.findById(id)  // 이 부분에서 id를 어디서 가져오는가?
-                .orElseThrow(() -> new IllegalArgumentException("user id 오류"));
+
+        // 두 줄 추가
+        Optional<User> optionalUser = this.userRepository.findByEmail(email);
+        User user = optionalUser.get();
+
         keyword.setKeyword1(keywords[0]);
         keyword.setKeyword2(keywords[1]);
         keyword.setKeyword3(keywords[2]);

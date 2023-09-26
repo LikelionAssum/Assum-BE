@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -29,10 +30,12 @@ public class WebScrapingService {
     }
     
     // 프론트에서 정리해서 post한 것을 DB에 저장
-    public void saveOrganizeText(Long id, WebScrapingDto scrapingDto){
-        // user 객체 가져오기
-        User user = this.userRepository.findById(id)
-                .orElseThrow(() -> new DataNotFoundException("해당 id로 찾을 수 없습니다 : "));;
+    public void saveOrganizeText(String email, WebScrapingDto scrapingDto){
+//        User user = this.userRepository.findById(id)
+//                .orElseThrow(() -> new DataNotFoundException("해당 id로 찾을 수 없습니다 : "));;
+
+        Optional<User> optionalUser = this.userRepository.findByEmail(email);
+        User user = optionalUser.get();
 
         // Dto에서 데이터 추출
         WebScraping webScraping = WebScraping.of(scrapingDto);

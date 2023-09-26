@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +24,22 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    // 로그인시 사용자 나이 저장하기 위한 api, 아직 사용자를 어떻게 가져올 지 모르겠음.
-    @PostMapping("/age")
-    public ResponseEntity<?> getAge(@RequestBody int age){
-        // to do 사용자 객체에 age 세팅하기
-        return null;
+    // 로그인시 사용자 나이 저장하기 위한 api
+    @ApiOperation(value = "사용자 age 가져오기", notes = "get age api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "나이 저장 성공"),
+            @ApiResponse(code = 400, message = "나이 저장 실패")
+    })
+    @PostMapping("/{age}")
+    public ResponseEntity<?> getAge(@RequestHeader("Authorization") String token,
+                                    @PathVariable int age) {
+        try{
+            this.userService.setUserAge(token, age);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (DataNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
@@ -36,9 +48,10 @@ public class UserController {
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/{userId}/all")
-    public ResponseEntity<List<WebScraping>> getUserQuestions(@PathVariable Long userId) {
+    public ResponseEntity<List<WebScraping>> getUserQuestions(@RequestHeader("Authorization") String token) {
         try{
-            List<WebScraping> list = userService.getUserwebscrapingList(userId);
+            String email = this.userService.getUserEmailToAccessToken(token);
+            List<WebScraping> list = userService.getUserwebscrapingList(email);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
@@ -52,8 +65,9 @@ public class UserController {
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/{userId}/home")
-    public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@PathVariable Long userId) {
-        List<WebScraping> list = userService.getUserwebscrapingList(userId);
+    public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@RequestHeader("Authorization") String token) {
+        String email = this.userService.getUserEmailToAccessToken(token);
+        List<WebScraping> list = userService.getUserwebscrapingList(email);
         try {
             // 최근 파일 5개 불러오기
             List<WebScraping> recentList = list.subList(list.size() - 5, list.size());
@@ -64,13 +78,6 @@ public class UserController {
             return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
         }
     }
-
-//  아마 백엔드쪽에서 유저 id를 쉽게 가져오는 방법인 것 같음.
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    Long userId = ((UserDetails) authentication.getPrincipal()).getId();
-//
-//    List<WebScraping> list = userService.getUserwebscrapingList(userId);
-//        return new RsssesponseEntity<>(list, HttpStatus.OK);
     
     // 기존 로그인 방식
      /*@ApiOperation(value = "회원가입", notes = "회원가입 api")

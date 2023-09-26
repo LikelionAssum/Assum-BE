@@ -14,18 +14,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    // 아직 확실치 않음.
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll() // 로그인 엔드포인트는 모든 사용자에게 허용
-                .antMatchers("/api/my-feature").hasRole("USER") // 다른 기능은 ROLE_USER 역할이 필요, 경로를 바꿔야 할 듯
-                .and()
-                .oauth2Login(); // OAuth2 로그인 설정
-    }
+public class SecurityConfig { //extends WebSecurityConfigurerAdapter, deprecated?
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -58,3 +47,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return http.build();
     }
 }
+
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/api/auth/**").permitAll() // 로그인 엔드포인트는 모든 사용자에게 허용
+//                .antMatchers("/api/my-feature").hasRole("USER") // 다른 기능은 ROLE_USER 역할이 필요, 경로를 바꿔야 할 듯
+//                .and()
+//                .oauth2Login(); // OAuth2 로그인 설정
+//    }

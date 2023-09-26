@@ -22,7 +22,6 @@ public class KeywordController {
     @GetMapping("/keywordRanking")
     public ResponseEntity<List<AgeKeywordRankDTO>> getKeywordRanking(){
         List<AgeKeywordRankDTO> ageKeywordRankDTO =keywordService.getKeywordRanking();
-
         return ResponseEntity.ok(ageKeywordRankDTO);
     }
 

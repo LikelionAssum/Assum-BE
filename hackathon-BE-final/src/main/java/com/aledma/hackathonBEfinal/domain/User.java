@@ -12,6 +12,7 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter // 추가
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id") // 무한 순환 참조 방지, 양쪽 모두 직렬화를 유지
 public class User {
@@ -30,6 +31,11 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
+
+    // 추가
+//    @Column(nullable = false)
+//    @Enumerated(value = EnumType.STRING)
+//    private Role role;
 
     @Builder
     public User(String email, OAuthProvider oAuthProvider) {
