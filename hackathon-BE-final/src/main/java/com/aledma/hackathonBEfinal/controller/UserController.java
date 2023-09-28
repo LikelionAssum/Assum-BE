@@ -47,7 +47,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "리스트 가져오기 성공"),
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
-    @GetMapping("/{userId}/all")
+    @GetMapping("/all")
     public ResponseEntity<List<WebScraping>> getUserQuestions(@RequestHeader("Authorization") String token) {
         try{
             String email = this.userService.getUserEmailToAccessToken(token);
@@ -64,7 +64,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "리스트 가져오기 성공"),
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
-    @GetMapping("/{userId}/home")
+    @GetMapping("/recent")
     public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@RequestHeader("Authorization") String token) {
         String email = this.userService.getUserEmailToAccessToken(token);
         List<WebScraping> list = userService.getUserwebscrapingList(email);

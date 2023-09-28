@@ -17,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Api(tags = "WebScraping", description = "url에서 텍스트 스크래핑")
 @RequiredArgsConstructor
@@ -63,6 +65,26 @@ public class WebScrapingController {
             return new ResponseEntity<>("저장에 실패하였습니다.", HttpStatus.BAD_REQUEST);
         }
     }
+
+    // 유저가 가진 스크래핑중 키워드 검색해서 반환
+    @ApiOperation(value = "키워드 검색 api", notes = "키워드 검색 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "검색 성공"),
+            @ApiResponse(code = 400, message = "검색 실패")
+    })
+    @GetMapping("/findByKeyword")
+    public ResponseEntity<List<WebScraping>> getWebScrapingByUserEmailAndKeyword(
+            @RequestHeader("Authorization") String token,
+            @RequestBody String keyword) {
+        try {
+            String email = this.userService.getUserEmailToAccessToken(token);
+            List<WebScraping> webScrapings = webScrapingService.getWebScrapingByUserEmailAndKeyword(email, keyword);
+            return new ResponseEntity<>(webScrapings, HttpStatus.OK);
+        }catch (DataNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }    
 
 //    @ApiOperation(value = "사용자가 가진 것중 검색", notes = "user가 가진 WebScraping중 필요한 것만 검색하는 api")
 //    @ApiResponses({

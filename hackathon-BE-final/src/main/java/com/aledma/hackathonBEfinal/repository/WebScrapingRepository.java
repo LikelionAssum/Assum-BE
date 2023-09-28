@@ -8,4 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface WebScrapingRepository extends JpaRepository<WebScraping, Long> {
+    // 유저 이메일로 keyword를 포함하는 Webscraping list 반환
+    List<WebScraping> findByUserEmailAndKeyword(String email, String keyword);
 }

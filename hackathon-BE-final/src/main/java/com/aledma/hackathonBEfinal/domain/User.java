@@ -32,10 +32,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WebScraping> webScrapings = new ArrayList<>();
 
-    // 추가
-//    @Column(nullable = false)
-//    @Enumerated(value = EnumType.STRING)
-//    private Role role;
 
     @Builder
     public User(String email, OAuthProvider oAuthProvider) {

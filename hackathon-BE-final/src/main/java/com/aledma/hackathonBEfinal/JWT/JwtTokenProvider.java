@@ -25,7 +25,7 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(expiredAt)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS256) // HS512였음
                 .compact();
     }
 

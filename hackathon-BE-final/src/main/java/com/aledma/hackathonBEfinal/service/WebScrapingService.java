@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -44,6 +45,19 @@ public class WebScrapingService {
         this.webScrapingRepository.save(webScraping);
 
     }
+
+    public List<WebScraping> getWebScrapingByUserEmailAndKeyword(String email, String keyword) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (!optionalUser.isPresent()) {
+            throw new DataNotFoundException("유저를 찾지 못했습니다.");
+        }
+        User user = optionalUser.get();
+
+        // 사용자 이메일과 키워드를 사용하여 WebScraping 항목을 찾음
+        return webScrapingRepository.findByUserEmailAndKeyword(email, keyword);
+    }
+
 }
 
 
