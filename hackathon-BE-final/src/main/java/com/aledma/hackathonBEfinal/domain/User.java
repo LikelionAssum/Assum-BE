@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.domain;
 
 import com.aledma.hackathonBEfinal.OAuth.OAuthProvider;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
@@ -37,5 +38,11 @@ public class User {
     public User(String email, OAuthProvider oAuthProvider) {
         this.email = email;
         this.oAuthProvider = oAuthProvider;
+    }
+    public static User of(UserLoginDto loginDto){
+        return User.builder()
+                .email(loginDto.getEmail())
+                .password(loginDto.getPassword())
+                .build();
     }
 }

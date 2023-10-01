@@ -3,6 +3,7 @@ package com.aledma.hackathonBEfinal.service;
 import com.aledma.hackathonBEfinal.JWT.AuthTokens;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
+
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.repository.UserRepository;
 import com.aledma.hackathonBEfinal.repository.WebScrapingRepository;
@@ -14,9 +15,11 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -87,6 +90,7 @@ public class UserService {
     /*@Transactional
     public Long login(UserDto userDto){
         User user = User.of(userDto);
+
         String email = user.getEmail();
         String password = user.getPassword();
 
@@ -95,4 +99,5 @@ public class UserService {
 
         return findUser.getId();
     }*/
+
 

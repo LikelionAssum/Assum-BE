@@ -1,8 +1,10 @@
 package com.aledma.hackathonBEfinal.controller;
 
-import com.aledma.hackathonBEfinal.domain.User;
+
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.UserDto;
+import com.aledma.hackathonBEfinal.dto.UserLoginDto;
+import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
 import com.aledma.hackathonBEfinal.service.UserService;
 import io.swagger.annotations.Api;
@@ -37,6 +39,7 @@ public class UserController {
             this.userService.setUserAge(token, age);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (DataNotFoundException e){
+
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -52,12 +55,14 @@ public class UserController {
         try{
             String email = this.userService.getUserEmailToAccessToken(token);
             List<WebScraping> list = userService.getUserwebscrapingList(email);
+
             return new ResponseEntity<>(list, HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    //            List<WebScraping> list = userService.getUserwebscrapingDList(userId);
 
     @ApiOperation(value = "WebScraping list 최근파일 5개", notes = "WebScraping Recent list api")
     @ApiResponses({
@@ -95,6 +100,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @ApiOperation(value = "로그인", notes = "로그인 api")
     @ApiResponses({

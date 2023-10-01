@@ -56,6 +56,7 @@ public class WebScrapingController {
     @PostMapping("/save")
     public ResponseEntity<?> saveOrganizeTextInDb(@RequestHeader("Authorization") String token,
                                                   WebScrapingDto webScrapingDto){
+
         try {
             String email = this.userService.getUserEmailToAccessToken(token);
             this.webScrapingService.saveOrganizeText(email, webScrapingDto);
