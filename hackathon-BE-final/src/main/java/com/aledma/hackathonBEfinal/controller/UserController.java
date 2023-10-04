@@ -30,11 +30,10 @@ public class UserController {
             @ApiResponse(code = 200, message = "나이 저장 성공"),
             @ApiResponse(code = 400, message = "나이 저장 실패")
     })
-    @PostMapping("/{age}")
-    public ResponseEntity<?> getAge(@RequestHeader("Authorization") String token,
-                                    @PathVariable int age) {
+    @PostMapping("/age")
+    public ResponseEntity<?> getAge(@RequestParam("num") int age) {
         try{
-            this.userService.setUserAge(token, age);
+            this.userService.setUserAge(age);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
@@ -48,10 +47,9 @@ public class UserController {
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/all")
-    public ResponseEntity<List<WebScraping>> getUserQuestions(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<WebScraping>> getUserQuestions() {
         try{
-            String email = this.userService.getUserEmailToAccessToken(token);
-            List<WebScraping> list = userService.getUserwebscrapingList(email);
+            List<WebScraping> list = userService.getUserwebscrapingList();
             return new ResponseEntity<>(list, HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
@@ -65,9 +63,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "리스트 가져오기 실패")
     })
     @GetMapping("/recent")
-    public ResponseEntity<List<WebScraping>> getRecentUserQuestions(@RequestHeader("Authorization") String token) {
-        String email = this.userService.getUserEmailToAccessToken(token);
-        List<WebScraping> list = userService.getUserwebscrapingList(email);
+    public ResponseEntity<List<WebScraping>> getRecentUserQuestions() {
+        List<WebScraping> list = userService.getUserwebscrapingList();
         try {
             // 최근 파일 5개 불러오기
             List<WebScraping> recentList = list.subList(list.size() - 5, list.size());

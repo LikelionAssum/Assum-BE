@@ -1,5 +1,6 @@
 package com.aledma.hackathonBEfinal.controller;
 
+import com.aledma.hackathonBEfinal.JWT.AuthTokensGenerator;
 import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
@@ -27,6 +28,8 @@ public class WebScrapingController {
     private final WebScrapingService webScrapingService;
     private final ChatGptService chatGptService;
     private final UserService userService;
+    private final AuthTokensGenerator authTokensGenerator;
+
 
     @ApiOperation(value = "text추출", notes = "url에서 text를 추출하는 api")
     @ApiResponses({
@@ -34,13 +37,12 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "텍스트 추출 실패, 어떤 오류인지 살펴보길 바람")
     })
     @PostMapping("/url")
-    public ResponseEntity<String> extractText(@RequestHeader("Authorization") String token,
-                                              String url) { //@PathVariable Long userId를 파라미터에서 삭제.
+    public ResponseEntity<String> extractText(String url) { //@PathVariable Long userId를 파라미터에서 삭제.
         try {
             String text = this.webScrapingService.extractTextFromUrl(url);
 
-            String email = this.userService.getUserEmailToAccessToken(token);
-            String sum_text = this.chatGptService.summarizeText(email, text);
+            Long userId = authTokensGenerator.extractMemberId();
+            String sum_text = this.chatGptService.summarizeText(userId, text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,11 +56,9 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "정리된 텍스트 저장 실패, 코드 오류 확인할 것, 서버 잘못일 가능성이 높음")
     })
     @PostMapping("/save")
-    public ResponseEntity<?> saveOrganizeTextInDb(@RequestHeader("Authorization") String token,
-                                                  WebScrapingDto webScrapingDto){
+    public ResponseEntity<?> saveOrganizeTextInDb(WebScrapingDto webScrapingDto){
         try {
-            String email = this.userService.getUserEmailToAccessToken(token);
-            this.webScrapingService.saveOrganizeText(email, webScrapingDto);
+            this.webScrapingService.saveOrganizeText(webScrapingDto);
             return new ResponseEntity<>("저장에 성공하였습니다.", HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
@@ -73,33 +73,15 @@ public class WebScrapingController {
             @ApiResponse(code = 400, message = "검색 실패")
     })
     @GetMapping("/findByKeyword")
-    public ResponseEntity<List<WebScraping>> getWebScrapingByUserEmailAndKeyword(
-            @RequestHeader("Authorization") String token,
-            @RequestBody String keyword) {
+    public ResponseEntity<List<WebScraping>> getWebScrapingByUserEmailAndKeyword(@RequestBody String keyword) {
         try {
-            String email = this.userService.getUserEmailToAccessToken(token);
-            List<WebScraping> webScrapings = webScrapingService.getWebScrapingByUserEmailAndKeyword(email, keyword);
+            List<WebScraping> webScrapings = webScrapingService.getWebScrapingByUserEmailAndKeyword(keyword);
             return new ResponseEntity<>(webScrapings, HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-    }    
+    }
 
-//    @ApiOperation(value = "사용자가 가진 것중 검색", notes = "user가 가진 WebScraping중 필요한 것만 검색하는 api")
-//    @ApiResponses({
-//            @ApiResponse(code = 200, message = "검색 성공"),
-//            @ApiResponse(code = 400, message = "검색 실패, 코드 문제일 수도 있음")
-//    })
-//    @GetMapping("/{userId}/search")
-//    public ResponseEntity<List<WebScraping>> searchWebScrapings(@PathVariable Long userId, @RequestParam String keyword) {
-//        try{
-//            List<WebScraping> searchList = webScrapingService.searchWebScrapingsByUserIdAndKeyword(userId, keyword);
-//            return new ResponseEntity<>(searchList, HttpStatus.OK);
-//        }catch (DataNotFoundException e) {
-//            e.printStackTrace();
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
 
 }
