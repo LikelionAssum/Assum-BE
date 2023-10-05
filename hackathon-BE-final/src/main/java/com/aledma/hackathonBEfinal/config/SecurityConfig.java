@@ -47,7 +47,8 @@ public class SecurityConfig{ //extends WebSecurityConfigurerAdapter, deprecated?
             "/api-docs/json",
             "/swagger-ui/springfox.css",
             "/swagger-ui/springfox.js",
-            "/v3/api-docs/**"
+            "/v3/api-docs/**",
+            "/api/auth/**"
 
     };
 
