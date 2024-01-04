@@ -1,6 +1,7 @@
 package com.aledma.hackathonBEfinal.service;
 
 
+import com.aledma.hackathonBEfinal.JWT.AuthTokensGenerator;
 import com.aledma.hackathonBEfinal.OAuth.OAuthInfoResponse;
 import com.aledma.hackathonBEfinal.domain.Keyword;
 import com.aledma.hackathonBEfinal.domain.User;
@@ -25,6 +26,7 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class ChatGptService {
+    private final AuthTokensGenerator authTokensGenerator;
     private final WebScrapingRepository webScrapingRepository;
     private final UserRepository userRepository;
     private final KeywordRepository keywordRepository;
@@ -36,7 +38,7 @@ public class ChatGptService {
     private String chatGptApiKey;
 
     @Transactional
-    public String summarizeText(Long userId, String inputText) throws IOException {
+    public String summarizeText(String inputText) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(chatGptApiKey);
@@ -78,9 +80,10 @@ public class ChatGptService {
         String[] keywords = extractKeywordsArray(generatedText);
         Keyword keyword = new Keyword();
 
-        // 두 줄 추가
-        Optional<User> optionalUser = this.userRepository.findById(userId);
+        Long userId = authTokensGenerator.extractMemberId();
+        Optional<User> optionalUser = userRepository.findById(userId);
         User user = optionalUser.get();
+
 
         keyword.setKeyword1(keywords[0]);
         keyword.setKeyword2(keywords[1]);

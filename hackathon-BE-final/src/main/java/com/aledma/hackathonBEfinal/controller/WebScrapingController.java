@@ -42,7 +42,7 @@ public class WebScrapingController {
             String text = this.webScrapingService.extractTextFromUrl(url);
 
             Long userId = authTokensGenerator.extractMemberId();
-            String sum_text = this.chatGptService.summarizeText(userId, text);
+            String sum_text = this.chatGptService.summarizeText(text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
