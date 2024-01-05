@@ -40,21 +40,15 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-
+    @GetMapping("/getAge")
     @ApiOperation(value = "사용자 age 가져오기", notes = "get age api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "나이 불러오기 성공"),
             @ApiResponse(code = 400, message = "나이 불러오기 실패")
     })
-    @GetMapping("/getAge")
-    public ResponseEntity<?> getAge() {
-        try{
-            int age = this.userService.getUserAge();
-            return new ResponseEntity<>(age, HttpStatus.OK);
-        }catch (DataNotFoundException e){
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Integer> getAge() {
+        Integer age = this.userService.getUserAge();
+        return ResponseEntity.ok(age);
     }
 
     @ApiOperation(value = "WebScraping list", notes = "WebScraping list api")
