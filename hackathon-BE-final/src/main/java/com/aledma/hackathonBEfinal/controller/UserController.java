@@ -25,16 +25,32 @@ public class UserController {
     private final UserService userService;
 
     // 로그인시 사용자 나이 저장하기 위한 api
-    @ApiOperation(value = "사용자 age 가져오기", notes = "get age api")
+    @ApiOperation(value = "사용자 age 저장하기", notes = "set age api")
     @ApiResponses({
             @ApiResponse(code = 200, message = "나이 저장 성공"),
             @ApiResponse(code = 400, message = "나이 저장 실패")
     })
-    @PostMapping("/age")
-    public ResponseEntity<?> getAge(@RequestParam("num") int age) {
+    @PostMapping("/setAge")
+    public ResponseEntity<?> setAge(@RequestParam("num") int age) {
         try{
             this.userService.setUserAge(age);
             return new ResponseEntity<>(HttpStatus.OK);
+        }catch (DataNotFoundException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "사용자 age 가져오기", notes = "get age api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "나이 불러오기 성공"),
+            @ApiResponse(code = 400, message = "나이 불러오기 실패")
+    })
+    @PostMapping("/getAge")
+    public ResponseEntity<?> getAge() {
+        try{
+            int age = this.userService.getUserAge();
+            return new ResponseEntity<>(age, HttpStatus.OK);
         }catch (DataNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -76,37 +92,6 @@ public class UserController {
         }
     }
     
-    // 기존 로그인 방식
-     /*@ApiOperation(value = "회원가입", notes = "회원가입 api")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "회원가입 성공"),
-            @ApiResponse(code = 400, message = "회원가입 실패")
-    })
-    @PostMapping("/signUp")
-    public ResponseEntity<?> signUp(@RequestBody UserDto userDto) {
-        try {
-            this.userService.signUp(userDto);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
 
-    @ApiOperation(value = "로그인", notes = "로그인 api")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "로그인 성공"),
-            @ApiResponse(code = 400, message = "로그인 실패")
-    })
-    @PostMapping("/login")
-    public ResponseEntity<Long> login(@RequestBody UserDto userDto) {
-        try {
-            Long id = this.userService.login(userDto);
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }*/
 
 }

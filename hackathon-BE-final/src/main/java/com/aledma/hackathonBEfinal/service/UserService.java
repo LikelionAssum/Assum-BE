@@ -54,6 +54,13 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public int getUserAge() {
+        Long userId = authTokensGenerator.extractMemberId();
+        Optional<User> optionalUser = userRepository.findById(userId);
+        User user = optionalUser.get();
+        return user.getAge();
+    }
+
 }
 
 
