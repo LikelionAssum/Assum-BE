@@ -46,7 +46,7 @@ public class UserController {
             @ApiResponse(code = 200, message = "나이 불러오기 성공"),
             @ApiResponse(code = 400, message = "나이 불러오기 실패")
     })
-    @PostMapping("/getAge")
+    @GetMapping("/getAge")
     public ResponseEntity<?> getAge() {
         try{
             int age = this.userService.getUserAge();
