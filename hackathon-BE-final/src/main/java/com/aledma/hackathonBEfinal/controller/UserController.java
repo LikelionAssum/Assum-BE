@@ -60,7 +60,7 @@ public class UserController {
     public ResponseEntity<List<WebScraping>> getUserQuestions() {
         try{
             List<WebScraping> list = userService.getUserwebscrapingList();
-            return new ResponseEntity<>(list, HttpStatus.OK);
+            return ResponseEntity.ok(list);
         }catch (DataNotFoundException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
