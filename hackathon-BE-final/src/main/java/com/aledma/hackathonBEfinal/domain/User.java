@@ -2,6 +2,7 @@ package com.aledma.hackathonBEfinal.domain;
 
 import com.aledma.hackathonBEfinal.OAuth.OAuthProvider;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,7 +31,8 @@ public class User {
 
     private OAuthProvider oAuthProvider;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<WebScraping> webScrapings = new ArrayList<>();
 
 

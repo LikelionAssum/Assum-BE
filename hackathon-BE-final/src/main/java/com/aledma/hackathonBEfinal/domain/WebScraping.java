@@ -2,6 +2,7 @@ package com.aledma.hackathonBEfinal.domain;
 
 
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
@@ -40,6 +41,7 @@ public class WebScraping {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
     
     // 생성일자 추가
