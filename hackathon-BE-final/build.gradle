@@ -50,14 +50,23 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'
 
 
-	//jwt 구현을 위한 spring security 및 jwt 관련 라이브러리
+	// jwt 구현을 위한 spring security 및 jwt 관련 라이브러리
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-	//discord
-
+	// Youtube API
+	implementation 'com.google.api-client:google-api-client:1.33.0'
+	implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+	implementation 'com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0'
+	implementation 'com.google.http-client:google-http-client-jackson2:1.39.2'
+	/*
+	- Google API와 통신하기 위한 Java용 클라이언트 라이브러리
+	- OAuth 2.0 인증 프로토콜을 지원하기 위한 Jetty 구현을 포함하는 라이브러리
+	- YouTube Data API를 사용할 수 있게 해주는 Google API 클라이언트 라이브러리
+	- Google HTTP Client 라이브러리의 Jackson2 모듈을 사용하여 JSON 데이터를 처리하는 기능을 제공하는 라이브러리
+	 */
 }
 
 tasks.named('test') {

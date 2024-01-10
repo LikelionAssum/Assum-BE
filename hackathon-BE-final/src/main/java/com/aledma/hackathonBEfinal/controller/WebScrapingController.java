@@ -5,10 +5,8 @@ import com.aledma.hackathonBEfinal.domain.User;
 import com.aledma.hackathonBEfinal.domain.WebScraping;
 import com.aledma.hackathonBEfinal.dto.WebScrapingDto;
 import com.aledma.hackathonBEfinal.exception.DataNotFoundException;
-import com.aledma.hackathonBEfinal.service.ChatGptService;
-import com.aledma.hackathonBEfinal.service.OAuthLoginService;
-import com.aledma.hackathonBEfinal.service.UserService;
-import com.aledma.hackathonBEfinal.service.WebScrapingService;
+import com.aledma.hackathonBEfinal.service.*;
+import com.google.api.services.youtube.model.Caption;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -27,6 +25,7 @@ import java.util.List;
 public class WebScrapingController {
     private final WebScrapingService webScrapingService;
     private final ChatGptService chatGptService;
+    private final YoutubeService youtubeService;
     private final UserService userService;
     private final AuthTokensGenerator authTokensGenerator;
 
@@ -43,6 +42,24 @@ public class WebScrapingController {
             Long userId = authTokensGenerator.extractMemberId();
             String sum_text = this.chatGptService.summarizeText(userId, text);
             return new ResponseEntity<>(sum_text, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(value = "유투브 영상 내용 추출 api", notes = "유투브 자막 추출 잘되는지 시험하는 api")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "자막 추출 성공"),
+            @ApiResponse(code = 400, message = "자막 추출 실패, 어떤 오류인지 살펴보길 바람")
+    })
+    @PostMapping("/youtubeUrl")
+    public ResponseEntity<List<Caption>> extractYoutubeCaption(String url) {
+        try {
+            String[] parts = url.split("v=");
+            String videoId = parts.length == 2 ? parts[1] : null; // 여기까지 url에서 videoId를 가져오는 부분
+            List<Caption> captions = this.youtubeService.getCaptions(videoId);
+            return ResponseEntity.ok(captions);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
