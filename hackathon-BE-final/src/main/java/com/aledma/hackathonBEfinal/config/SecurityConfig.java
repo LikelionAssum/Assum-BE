@@ -27,7 +27,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig{ //extends WebSecurityConfigurerAdapter, deprecated?
+public class SecurityConfig{
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
@@ -48,7 +48,8 @@ public class SecurityConfig{ //extends WebSecurityConfigurerAdapter, deprecated?
             "/swagger-ui/springfox.css",
             "/swagger-ui/springfox.js",
             "/v3/api-docs/**",
-            "/api/auth/**"
+            "/api/auth/**",
+            "/**"
 
     };
 
@@ -114,7 +115,9 @@ public class SecurityConfig{ //extends WebSecurityConfigurerAdapter, deprecated?
                 "/webjars/**",
                 /* swagger v3 */
                 "/v3/api-docs/**",
-                "/swagger-ui/**");
+                "/swagger-ui/**",
+                "/**"
+        );
     }
 
 
